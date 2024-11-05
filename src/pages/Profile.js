@@ -4,7 +4,7 @@ import Avatar from '../components/Avatar';
 import NameTitle from '../components/NameTitle';
 import { Feather } from '@expo/vector-icons';
 
-const Profile = () => {
+const Profile = ({ onLogOut }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   return (
@@ -60,7 +60,7 @@ const Profile = () => {
         />
       </View>
 
-      <TouchableOpacity style={styles.logoutButton}>
+      <TouchableOpacity style={styles.logoutButton} onPress={onLogOut}>
         <Text style={styles.logoutButtonText}>Log Out</Text>
       </TouchableOpacity>
     </View>
@@ -69,8 +69,9 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
     flex: 1,
+    padding: 20,
+    paddingTop: 40,
     justifyContent: 'space-between',
     backgroundColor: '#f5f5f5',
   },
@@ -124,12 +125,10 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    marginTop: 30,
+    backgroundColor: '#4676c7',
   },
   logoutButtonText: {
-    color: '#555',
+    color: '#fff',
     fontWeight: 'bold',
     fontSize: 18,
   },
