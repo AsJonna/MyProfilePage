@@ -1,31 +1,58 @@
 import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import Home from './src/pages/Home';
+import Task from './src/pages/Task';
+import Profile from './src/pages/Profile';
 import Login from './src/pages/Login';
 import Register from './src/pages/Register';
 import PasswordRecovery from './src/pages/PasswordRecovery';
-import Profile from './src/pages/Profile';
+import Tab2 from './src/components/Tabs/tab2';
 
 const App = () => {
   const [currentScreen, setCurrentScreen] = useState('Login');
+  const [activeTab, setActiveTab] = useState('Tab1');
 
-  const navigateTo = (screen) => {
-    setCurrentScreen(screen);
+  const renderScreen = () => {
+    switch (currentScreen) {
+      case 'Home':
+        return <Home onLogOut={() => setCurrentScreen('Login')} />;
+      case 'Task':
+        return <Task onLogOut={() => setCurrentScreen('Login')} />;
+      case 'Profile':
+        return <Profile onLogOut={() => setCurrentScreen('Login')} />;
+      case 'Login':
+        return (
+          <Login
+            onLoginSuccess={() => setCurrentScreen('Home')}
+            onNavigateToRecovery={() => setCurrentScreen('PasswordRecovery')}
+            onNavigateToRegister={() => setCurrentScreen('Register')}
+          />
+        );
+      case 'Register':
+        return <Register onNavigateBack={() => setCurrentScreen('Login')} />;
+      case 'PasswordRecovery':
+        return (
+          <PasswordRecovery onNavigateBack={() => setCurrentScreen('Login')} />
+        );
+      default:
+        return <Login />;
+    }
   };
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      {currentScreen === 'Login' && (
-        <Login 
-          onLoginSuccess={() => navigateTo('Profile')} 
-          onNavigateToRecovery={() => navigateTo('PasswordRecovery')} 
-          onNavigateToRegister={() => navigateTo('Register')}
-        />
-      )}
-      {currentScreen === 'Register' && <Register onNavigateBack={() => navigateTo('Login')} />}
-      {currentScreen === 'PasswordRecovery' && <PasswordRecovery onNavigateBack={() => navigateTo('Login')} />}
-      {currentScreen === 'Profile' && <Profile onLogOut={() => navigateTo('Login')} />}
+      {renderScreen()}
+      {currentScreen !== 'Login' &&
+        currentScreen !== 'Register' &&
+        currentScreen !== 'PasswordRecovery' && (
+          <Tab2
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            setCurrentScreen={setCurrentScreen}
+          />
+        )}
     </View>
   );
 };
@@ -33,7 +60,6 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
 });
 
